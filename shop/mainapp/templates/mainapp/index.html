@@ -1,0 +1,46 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block container %}
+    <div class="slider">
+        {% include 'mainapp/includes/inc__main_menu.html' %}
+        <div class="text-slider">
+            <h3 class="green">одна душа</h3>
+            <h3 class="big"> одна дорога </h3>
+            <p>Новые возможности. Новый уровень комфорта. </p>
+            <a href="#" class="button-order">заказать <img src="{% static 'img/arrow.png' %}" alt=""></a>
+        </div>
+        <div class="navi">
+            <a href="#"></a><a href="#"></a><a href="#"></a>
+        </div>
+    </div>
+
+    <div class="featured">
+        <div class="featured-menu">
+            <a class="active" href="#">Популярные</a><a href="#">Новинки</a>
+        </div>
+        <a class="explore" href="#">показать все <img src="{% static 'img/arrow.png' %}" alt=""></a>
+        <div class="clearfix">
+        </div>
+        <div class="tab-content">
+            <div class="block">
+                <a href="#"><img src="{% static 'img/product-1.jpg' %}" alt="">
+                    <div class="text">
+                        <img src="{% static 'img/icon-hover.png' %}" alt="img">
+                        <h4>Надежный друг</h4>
+                        <p>Не подведет на дороге. </p>
+                    </div>
+                </a>
+            </div>
+            <div class="block">
+                <a href="#"><img src="{% static 'img/product-2.jpg' %}" alt="">
+                    <div class="text">
+                        <img src="{% static 'img/icon-hover.png' %}" alt="">
+                        <h4>Верный товарищ</h4>
+                        <p>Никогда не скажет "нет". </p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

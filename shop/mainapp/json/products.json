@@ -1,0 +1,92 @@
+[
+    {
+        "category": "классика",
+        "name": "BMW R NINET SCRAMBLER",
+        "image": "products_images/product-1.jpg",
+        "short_desc": "мотоцикл",
+        "description": "Заводите мотор и мчите навстречу свободе.",
+        "price": "999.000",
+        "quantity": "17"
+    },
+    {
+        "category": "классика",
+        "name": "SUZUKI SV 650 A",
+        "image": "products_images/product-2.jpg",
+        "short_desc": "мотоцикл",
+        "description": " За его рулем вы испытаете совершенно новые, неизведанные прежде ощущения.",
+        "price": "779.990",
+        "quantity": "21"
+    },
+    {
+        "category": "классика",
+        "name": "SUZUKI INTRUDER VL800C",
+        "image": "products_images/product-3.jpg",
+        "short_desc": "мотоцикл",
+        "description": "Готов подарить незабываемые впечатления от поездки каждому.",
+        "price": "449.990",
+        "quantity": "7"
+    },
+    {
+        "category": "спорт",
+        "name": "HONDA CBR650R",
+        "image": "products_images/product-4.jpg",
+        "short_desc": "мотоцикл",
+        "description": "Комфортная езда по городу или рекордное время круга на гоночном треке.",
+        "price": "854.900",
+        "quantity": "27"
+    },
+    {
+        "category": "спорт",
+        "name": "KAWASAKI NINJA ZX-6R",
+        "image": "products_images/product-5.jpg",
+        "short_desc": "мотоцикл",
+        "description": " Для дальних поездок выходного дня.",
+        "price": "989.152",
+        "quantity": "9"
+    },
+    {
+        "category": "чоппер",
+        "name": "Honda VT1300CX Fury",
+        "image": "products_images/product-6.jpg",
+        "short_desc": "мотоцикл",
+        "description": "Крутой выхлоп Vance&Hines, новый воздушный фильтр K&N.",
+        "price": "790.000",
+        "quantity": "18"
+    },
+    {
+        "category": "чоппер",
+        "name": "Harley-Davidson Dyna Fat Bob FXDF",
+        "image": "products_images/product-7.jpg",
+        "short_desc": "мотоцикл",
+        "description": "Шикарный агрессивный внешний вид, тюненый руль.",
+        "price": "835.000",
+        "quantity": "12"
+    },
+    {
+        "category": "электроцикл",
+        "name": "Charger X 12000W",
+        "image": "products_images/product-8.jpg",
+        "short_desc": "мотоцикл",
+        "description": "Серия Charger X это четвертое поколение электробайков.",
+        "price": "400.000",
+        "quantity": "25"
+    },
+    {
+        "category": "электроцикл",
+        "name": "ZERO SR 2017",
+        "image": "products_images/product-9.jpg",
+        "short_desc": "мотоцикл",
+        "description": "ZERO SR – самый быстрый и мощный в мире серийный электромотоцикл.",
+        "price": "980.000",
+        "quantity": "18"
+    },
+    {
+        "category": "электроцикл",
+        "name": "Energica EGO 107kW",
+        "image": "products_images/product-10.jpg",
+        "short_desc": "мотоцикл",
+        "description": "С первого взгляда сразу понимаешь, что мотоцикл рожден для скорости и драйва.",
+        "price": "960.000",
+        "quantity": "8"
+    }
+]
