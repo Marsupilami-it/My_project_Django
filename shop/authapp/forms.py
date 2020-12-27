@@ -6,6 +6,8 @@ from django.forms.widgets import HiddenInput
 from authapp.models import ShopUser
 from django.forms import forms
 
+from authapp.models import ShopUserProfile
+
 
 class ShopUserLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
@@ -61,3 +63,15 @@ class ShopUserUpdateForm(UserChangeForm):
         if age and age < 18:
             raise forms.ValidationError('Вы слишком молоды!')
         return age
+
+
+class ShopUserProfileUpdateForm(forms.Form):
+    class Meta:
+        model = ShopUserProfile
+        fields = ('tagline', 'about_me', 'gender',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = f'form-control {field_name}'
+            field.help_text = ''

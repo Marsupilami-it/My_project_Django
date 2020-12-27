@@ -12,6 +12,8 @@ from authapp.forms import ShopUserRegisterForm
 from authapp.forms import ShopUserUpdateForm
 from authapp.models import ShopUser
 
+from authapp.forms import ShopUserProfileUpdateForm
+
 
 # Функция для письма-активации пользователя в системе
 def send_verify_email(user):
@@ -84,14 +86,17 @@ def register(request):
 def update(request):
     if request.method == 'POST':
         form = ShopUserUpdateForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
+        profile_update_form = ShopUserProfileUpdateForm(request.POST, instance=request.user.shopuserprofile)
+        if form.is_valid() and profile_update_form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('main:index'))
     else:
         form = ShopUserUpdateForm(instance=request.user)
+        profile_update_form = ShopUserProfileUpdateForm(instance=request.user.shopuserprofile)
 
     context = {
         'page_title': 'редактирование',
         'form': form,
+        'profile_form': profile_update_form
     }
     return render(request, 'authapp/update.html', context)

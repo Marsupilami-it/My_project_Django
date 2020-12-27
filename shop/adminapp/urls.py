@@ -18,4 +18,6 @@ urlpatterns = [
     path('category/<int:pk>/products/', adminapp.category_products, name='category_products'),
     path('product/<int:pk>/', adminapp.MotoDetail.as_view(), name='moto_detail'),
     path('category/<int:pk>/product/create/', adminapp.product_create, name='product_create'),
+    path('category/<int:pk>/product/update/', adminapp.product_update, name='product_update'),
+    path('category/<int:pk>/product/delete/', adminapp.product_delete, name='product_delete'),
 ]
