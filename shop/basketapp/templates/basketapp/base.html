@@ -2,10 +2,10 @@
 {% load static %}
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>
+	<meta charset="utf-8">
+	<title>
         {% block title %}
-            {{ page_title|capfirst }}
+            {{ title|title }}
         {% endblock %}
     </title>
     {% block css %}
@@ -15,20 +15,20 @@
     {% endblock %}
     {% block js %}
         <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-        <script src="{% static 'js/bootstrap.min.js' %}"></script>
         <script src="{% static 'js/basket_scripts.js' %}"></script>
     {% endblock %}
 </head>
 <body>
-<div class="basket_container">
-    <div class="h2 text-center head">
-        Ваша корзина,
-        {{ user.first_name|default:"пользователь"|title }}
-    </div>
+	<div class="basket_container">        
+        <div class="h2 text-center head">
+            Ваша корзина, {% if user.first_name %}{{ user.first_name|title}}{% else %}Пользователь{% endif %}
+        </div>
+        
+        
+        {% block content %}
 
-    {% block container %}
-    {% endblock %}
-
-</div>
+        {% endblock %}
+        
+	</div>
 </body>
 </html>

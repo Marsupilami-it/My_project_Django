@@ -1,33 +1,36 @@
 {% extends 'mainapp/base.html' %}
+{% load static %}
 
-{% block container %}
+{% block menu %}   
     <div class="hero">
-        {% include 'mainapp/includes/inc__main_menu.html' %}
-        <h1>наши контакты</h1>
+		<div class="header clearfix">
+            {% include 'mainapp/includes/inc_menu.html' %}
+		</div>
+		<h1>наши контакты</h1>
+	</div>
+{% endblock %}
+
+{% block content %}
+    <div class="location">
+        {% for location in locations %}
+        <div class="location-1">
+            <i class="fa fa-map-marker fa-5x"></i>
+            <h4>{{ location.city }}</h4>
+            <div class="contacts">
+                <h5>Телефон</h5>
+                <p>{{ location.phone }}</p>
+            </div>
+            <div class="contacts">
+                <h5>Email</h5>
+                <p>{{ location.email }}</p>
+            </div>
+            <div class="contacts">
+                <h5>Адрес</h5>
+                <p>{{ location.address }}</p>
+            </div>
+        </div>
+       {% endfor %}
     </div>
 
-    <div class="location">
-        {% if locations %}
-            {% for item in locations %}
-                <div class="location-1">
-                    <i class="fa fa-map-marker fa-5x"></i>
-                    <h4>{{ item.city }}</h4>
-                    <div class="contacts">
-                        <h5>Телефон</h5>
-                        <p>{{ item.phone }}</p>
-                    </div>
-                    <div class="contacts">
-                        <h5>Email</h5>
-                        <p>{{ item.email }}</p>
-                    </div>
-                    <div class="contacts">
-                        <h5>Адрес</h5>
-                        <p>{{ item.address }}</p>
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <h3>Данные о локациях загружаются</h3>
-        {% endif %}
-    </div>
+    <div class="clr"></div>
 {% endblock %}
