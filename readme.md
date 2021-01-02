@@ -10,4 +10,3 @@ Django 3.1
 SQLite3
 
 # Лицензия:
-MIT
