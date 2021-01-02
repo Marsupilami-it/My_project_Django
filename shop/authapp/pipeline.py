@@ -1,45 +1,27 @@
-from urllib.parse import urlunparse, urlencode
-from collections import OrderedDict
-import requests
-from authapp.models import ShopUserProfile
-from django.utils import timezone
-import datetime
 from social_core.exceptions import AuthForbidden
 
 
 def save_user_profile(backend, user, response, *args, **kwargs):
-    if backend.name != 'vk-oauth2':
-        return
+    if backend.name == "google-oauth2":
+        if 'gender' in response.keys():
+            if response['gender'] == 'male':
+                user.shopuserprofile.gender = 'M'
+            else:
+                user.shopuserprofile.gender = 'W'
 
-    api_url = urlunparse(('https',
-                          'api.vk.com',
-                          '/method/users.get',
-                          None,
-                          urlencode(OrderedDict(fields=','.join(('bdate', 'sex', 'about')),
-                                                access_token=response['access_token'],
-                                                v='5.92')),
-                          None
-                          ))
-    resp = requests.get(api_url)
-    if resp.status_code != 200:
-        return
+        if 'tagline' in response.keys():
+            user.shopuserprofile.tagline = response['tagline']
 
-    data = resp.json()['response'][0]
+        if 'aboutMe' in response.keys():
+            user.shopuserprofile.aboutMe = response['aboutMe']
 
-    if data['sex']:
-        if data['sex'] == 2:
-            user.shopuserprofile.gender = ShopUserProfile.MALE
-        elif data['sex'] == 1:
-            user.shopuserprofile.gender = ShopUserProfile.FEMALE
+        if 'ageRange' in response.keys():
+            minAge = response['ageRange']['min']
+            # print(f'{user} minAge: {minAge}')
+            if int(minAge) < 18:
+                user.delete()
+                raise AuthForbidden('social_core.backends.google.GoogleOAuth2')
 
-    if data['about']:
-        user.shopuserprofile.about_me = data['about']
-
-    if data['bdate']:
-        bdate = datetime.datetime.strptime(data['bdate'], '%d.%m.$Y').date()
-
-        age = timezone.now().date().year - bdate.year
-        if age < 18:
-            user.delete()
-            raise AuthForbidden('social_core.backends.vk.VKOAuth2')
         user.save()
+
+    return

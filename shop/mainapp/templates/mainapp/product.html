@@ -1,32 +1,31 @@
 {% extends 'mainapp/base.html' %}
 {% load static %}
 
-{% block container %}
-    <div class="hero-white">
-        {% include 'mainapp/includes/inc__main_menu.html' %}
-    </div>
 
+{% block content %}
     <div class="details">
-        {% include 'mainapp/includes/inc__catalog_menu.html' %}
+        <div class="links clearfix">
+            {% include 'mainapp/includes/inc_categories_menu.html' %}
+        </div>
 
         <div class="details-products">
             <div class="details-slider">
                 <div class="slider-product">
-                    <img src="/media/{{ product.image }}">
+                    <img src="/media/{{ product.image }}" alt="{{ product.short_desc }}">
                 </div>
                 <div class="slider-control">
                     <div class="block">
-                        <a href="#"><img src="/media/{{ product.image }}" alt="">
+                        <a href="#"><img src="/media/{{ product.image }}" alt="вариант 1">
                             <div class="text"></div>
                         </a>
                     </div>
                     <div class="block">
-                        <a href="#"><img src="/media/{{ product.image }}" alt="">
+                        <a href="#"><img src="/media/{{ product.image }}" alt="вариант 2">
                             <div class="text"></div>
                         </a>
                     </div>
                     <div class="block">
-                        <a href="#"><img src="/media/{{ product.image }}" alt="">
+                        <a href="#"><img src="/media/{{ product.image }}" alt="вариант 3">
                             <div class="text"></div>
                         </a>
                     </div>
@@ -38,7 +37,8 @@
                 <br>
                 <p class="price"> {{ product.price }} <span>руб</span></p>
                 <a href="{% url 'basket:add' product.pk %}" class="red-button">
-                    заказать <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    заказать 
+                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
                 </a>
                 <div class="description-text">
                     {{ product.description }}
@@ -47,4 +47,7 @@
         </div>
 
     </div>
+
+    <div class="clr"></div>
+
 {% endblock %}

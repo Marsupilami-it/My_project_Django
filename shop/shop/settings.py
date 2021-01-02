@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os
+import os, json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'authapp',
     'basketapp',
     'adminapp',
+    'ordersapp',
 ]
 
 MIDDLEWARE = [
@@ -149,19 +150,44 @@ EMAIL_USE_SSL = False
 # EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = 'tmp/emails/'
+EMAIL_FILE_PATH = 'tmp/email-messages/'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.vk.VKOAuth2',
+    # Бекенд для google
+    # 'social_core.backends.google.GoogleOAuth2',
+    # Бекенд для github
+    # 'social_core.backends.github.GithubOAuth2',
 )
 
-# Следующие 2 строки являются ключами, их необходимо держать в отдельном .json-файле.
-SOCIAL_AUTH_VK_OAUTH2_KEY = '7711616'
-SOCIAL_AUTH_VK_OAUTH2_SECRET = 'KvAPmm31yTykDFbpVRH3'
+# Следующие 2 строки являются ключами авторизации, их необходимо держать в отдельном .json-файле.
+SOCIAL_AUTH_VK_OAUTH2_KEY = '7716899'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'q02bTi29O06nQZRYI5nG'
 
 SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'xxxxxxxxxxxxxxxxxxxxx'
+
+'''
+with open('shop/google+.json', 'r') as f:
+    GOOGLE_PLUS = json.load(f)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = GOOGLE_PLUS['SOCIAL_AUTH_GOOGLE_OAUTH2_KEY']
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = GOOGLE_PLUS['SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET']
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_IGNORE_DEFAULT_SCOPE = True
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'email',
+    'profile',
+    'openid',
+    'https://www.googleapis.com/auth/plus.login',
+]
+'''
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',

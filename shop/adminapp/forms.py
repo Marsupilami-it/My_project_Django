@@ -1,69 +1,37 @@
-from django.contrib.auth import get_user_model
+from django import forms
+from authapp.models import ShopUser
+from authapp.forms import ShopUserEditForm
+from mainapp.models import ProductCategory
 
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.forms import forms, HiddenInput, ModelForm
-
-from mainapp.models import MotoCategory
-
-
-class AgeValidationMixin:
-    def clean_age(self):
-        age = self.cleaned_data.get('age')
-        if age and age < 18:
-            raise forms.ValidationError('Вы слишком молоды!')
-        return age
+from mainapp.models import Product
 
 
-class AdminShopUserCreateForm(UserCreationForm, AgeValidationMixin):
+class ShopUserAdminEditForm(ShopUserEditForm):
     class Meta:
-        model = get_user_model()
-        fields = ('username', 'first_name', 'last_name', 'password1', 'password2',
-                  'email', 'age', 'avatar', 'is_staff', 'is_superuser', 'is_active')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = f'form-control {field_name}'
-            field.help_text = ''
-            if field_name == 'password':
-                field.widget = HiddenInput()
+        model = ShopUser
+        fields = '__all__'
 
 
-class AdminShopUserUpdateForm(UserChangeForm, AgeValidationMixin):
+class ProductCategoryEditForm(forms.ModelForm):
     class Meta:
-        model = get_user_model()
-        fields = ('username', 'first_name', 'last_name', 'password',
-                  'email', 'age', 'avatar', 'is_staff', 'is_superuser', 'is_active')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = f'form-control {field_name}'
-            field.help_text = ''
-            if field_name == 'password':
-                field.widget = HiddenInput()
-
-
-class AdminMotoCategoryUpdateForm(ModelForm):
-    class Meta:
-        model = MotoCategory
+        model = ProductCategory
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(ProductCategoryEditForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
+            field.help_text = ''
 
 
-class AdminMotoUpdateForm(ModelForm):
+class ProductEditForm(forms.ModelForm):
     class Meta:
-        model = MotoCategory
+        model = Product
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(ProductEditForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
-            if field_name == 'category':
-                field.widget = HiddenInput()
+            field.help_text = ''
 

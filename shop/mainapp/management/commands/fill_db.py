@@ -1,31 +1,33 @@
-import json
-
 from django.core.management.base import BaseCommand
-
-from mainapp.models import Moto, MotoCategory
-
+from mainapp.models import ProductCategory, Product
 from authapp.models import ShopUser
+from mainapp.views import load_from_json
+
+JSON_PATH = 'mainapp/json'
 
 
-def load_from_json(file_name):
-    with open(file_name, encoding='utf-8') as infile:
-        return json.load(infile)
-
-
-# Скрипт восстановления данных
 class Command(BaseCommand):
-    help = 'Fill data in db'
+    help = 'Fill DB new data'
 
     def handle(self, *args, **options):
-        items = load_from_json('mainapp/json/categories.json')
-        for item in items:
-            MotoCategory.objects.create(**item)
+        categories = load_from_json('categories')
 
-        items = load_from_json('mainapp/json/products.json')
-        for item in items:
-            category = MotoCategory.objects.filter(name=item['category']).first()
-            item['category'] = category
-            Moto.objects.create(**item)
+        ProductCategory.objects.all().delete()
+        for category in categories:
+            new_category = ProductCategory(**category)
+            new_category.save()
 
-    if not ShopUser.objects.filter(username='django').exists():
-        ShopUser.objects.create_superuser('django', 'django@gb.local', 'geekbrains')
+        products = load_from_json('products')
+
+        Product.objects.all().delete()
+        for product in products:
+            category_name = product["category"]
+            # Получаем категорию по имени
+            _category = ProductCategory.objects.get(name=category_name)
+            # Заменяем название категории объектом
+            product['category'] = _category
+            new_product = Product(**product)
+            new_product.save()
+
+        # Создаем суперпользователя при помощи менеджера модели
+        super_user = ShopUser.objects.create_superuser('django', 'django@geekshop.local', 'geekbrains', age=33)

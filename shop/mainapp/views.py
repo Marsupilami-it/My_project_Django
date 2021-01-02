@@ -1,106 +1,110 @@
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+import datetime, random, os, json
 from django.shortcuts import render, get_object_or_404
-import random
-from mainapp.models import MotoCategory
+from mainapp.models import ProductCategory, Product
 
-from mainapp.models import Moto
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from basketapp.models import Basket
+JSON_PATH = 'mainapp/json'
 
 
-def get_catalog_menu():
-    return MotoCategory.objects.all()
+def load_from_json(file_name):
+    with open(os.path.join(JSON_PATH, file_name + '.json'), 'r') as infile:
+        return json.load(infile)
 
 
 def get_hot_product():
-    products = Moto.objects.all()
-    return random.choice(products)
+    products = Product.objects.filter(is_active=True, category__is_active=True)
+
+    return random.sample(list(products), 1)[0]
 
 
-def get_same_products(product):
-    return Moto.objects.filter(category=product.category).exclude(pk=product.pk)
+def get_same_products(hot_product):
+    same_products = Product.objects.filter(category=hot_product.category, is_active=True).exclude(pk=hot_product.pk)[:3]
+
+    return same_products
 
 
-def index(request):
-    context = {
-        'page_title': 'Главная',
-        'catalog_menu': get_catalog_menu,
-    }
-    return render(request, 'mainapp/index.html', context=context)
+def main(request):
+    title = 'главная'
+    products = Product.objects.filter(is_active=True, category__is_active=True)[:3]
 
-
-def products(request):
-    hot_product = get_hot_product()
-
-    context = {
-        'page_title': 'Каталог',
-        'hot_product': hot_product,
-        'same_products': get_same_products(hot_product),
-        'catalog_menu': get_catalog_menu,
-    }
-    return render(request, 'mainapp/products.html', context=context)
-
-
-def category_items(request, category_pk, page_num=1):
-    if category_pk == 0:
-        products = Moto.objects.all()
-    else:
-        products = Moto.objects.filter(category_id=category_pk)
-
-    products_paginator = Paginator(products, 2)
-    try:
-        products = products_paginator.page(page_num)
-    except PageNotAnInteger:
-        products = products_paginator.page(1)
-    except EmptyPage:
-        products = products_paginator.page(products_paginator.num_pages)
-
-    context = {
-        'page_title': 'Каталог',
-        'catalog_menu': get_catalog_menu,
+    content = {
+        'title': title,
         'products': products,
-        'category_pk': category_pk,
     }
-    return render(request, 'mainapp/category_items.html', context=context)
+
+    return render(request, 'mainapp/index.html', content)
 
 
-def product_page(request, product_pk):
-    product = get_object_or_404(Moto, pk=product_pk)
+def products(request, pk=None, page=1):
+    title = 'продукты'
+    links_menu = ProductCategory.objects.filter(is_active=True)
 
-    context = {
-        'page_title': 'Продукт',
-        'catalog_menu': get_catalog_menu,
+    if pk:
+        if pk == '0':
+            category = {
+                'pk': 0,
+                'name': 'все'
+            }
+            products = Product.objects.filter(is_active=True, category__is_active=True).order_by('price')
+        else:
+            category = get_object_or_404(ProductCategory, pk=pk)
+            products = Product.objects.filter(category__pk=pk, is_active=True, category__is_active=True).order_by(
+                'price')
+
+        paginator = Paginator(products, 2)
+        try:
+            products_paginator = paginator.page(page)
+        except PageNotAnInteger:
+            products_paginator = paginator.page(1)
+        except EmptyPage:
+            products_paginator = paginator.page(paginator.num_pages)
+
+        content = {
+            'title': title,
+            'links_menu': links_menu,
+            'category': category,
+            'products': products_paginator,
+        }
+
+        return render(request, 'mainapp/products_list.html', content)
+
+    hot_product = get_hot_product()
+    same_products = get_same_products(hot_product)
+
+    content = {
+        'title': title,
+        'links_menu': links_menu,
+        'hot_product': hot_product,
+        'same_products': same_products,
+    }
+
+    return render(request, 'mainapp/products.html', content)
+
+
+def product(request, pk):
+    title = 'продукты'
+    links_menu = ProductCategory.objects.filter(is_active=True)
+
+    product = get_object_or_404(Product, pk=pk)
+
+    content = {
+        'title': title,
+        'links_menu': links_menu,
         'product': product,
-        'category_pk': product.category_id,
     }
-    return render(request, 'mainapp/product_page.html', context=context)
+    return render(request, 'mainapp/product.html', content)
 
 
 def contact(request):
-    _locations = [
-        {
-            'city': 'Москва',
-            'phone': '+7-888-888-8888',
-            'email': 'shop@gmail.com',
-            'address': 'В пределах МКАД',
-        },
-        {
-            'city': 'Екатеринбург',
-            'phone': '+7-889-889-8989',
-            'email': 'shop@gmail.com',
-            'address': 'Центральный проспект',
-        },
-        {
-            'city': 'Казань',
-            'phone': '+7-887-878-8778',
-            'email': 'shop@gmail.com',
-            'address': 'Красная площадь',
-        },
-    ]
+    title = 'о нас'
 
-    context = {
-        'page_title': 'Контакты',
-        'locations': _locations,
-        'catalog_menu': get_catalog_menu,
+    locations = load_from_json('contact__locations')
+
+    content = {
+        'title': title,
+        'locations': locations,
     }
-    return render(request, 'mainapp/contact.html', context=context)
+
+    return render(request, 'mainapp/contact.html', content)
+
