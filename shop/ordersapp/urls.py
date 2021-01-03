@@ -1,5 +1,5 @@
 import ordersapp.views as ordersapp
-from django.urls import re_path
+from django.urls import re_path, path
 
 app_name="ordersapp"
 
